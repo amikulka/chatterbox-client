@@ -19,6 +19,7 @@ var App = {
     App.startSpinner();
     App.fetch(App.stopSpinner);
 
+
     // TODO: Make sure the app loads data from the API
     // continually, instead of just once at the start.
   },
@@ -26,11 +27,16 @@ var App = {
   fetch: function(callback = ()=>{}) {
     Parse.readAll((data) => {
       // examine the response from the server request:
-      console.log(data);
-
-      // TODO: Use the data to update Messages and Rooms
-      // and re-render the corresponding views.
+      // reassign the _data variable in the Messages object to data return from readAll
+      Messages.set(data);
     });
+    // TODO: Use the data to update Messages and Rooms
+    // and re-render the corresponding views.
+    //call the callback function
+    callback();
+    //call setTimeout(fetch)
+    MessagesView.render();
+    setTimeout(App.fetch.bind(this), 10000);
   },
 
   startSpinner: function() {

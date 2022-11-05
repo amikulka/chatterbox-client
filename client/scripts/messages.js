@@ -18,6 +18,9 @@ var Messages = {
   //getByRoom function with string( roomname ) as argument
   //returns an array of messages that are in that room
   // if no roomname is given, then it would default to lobby.
+  get: function() {
+    return this._data;
+  },
 
   getByRoom: function(roomName = 'lobby') {
     return this._data.filter(message => {

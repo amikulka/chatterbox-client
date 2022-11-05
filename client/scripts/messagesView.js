@@ -11,17 +11,22 @@ var MessagesView = {
     this.render();
   },
 
-  render: function() {
+  render: function(roomname = 'lobby') {
     // TODO: Render _all_ the messages.
     this.$chats.empty();
-    Messages.each(this.renderMessage.bind(this));
+    Messages.getByRoom(roomname).forEach(MessagesView.renderMessage);
     //
   },
 
   renderMessage: function(message) {
     // TODO: Render a single message.
     // We have to append our message to the $chats using render templet from messageView
-    this.$chats.append(MessageView.render(message));
+    if (Friends._data.includes(message.username)) {
+      message.className = 'friend';
+    } else {
+      message.className = '';
+    }
+    MessagesView.$chats.append(MessageView.render(message));
   },
 
   handleClick: function(event) {

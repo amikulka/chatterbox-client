@@ -12,16 +12,23 @@ var App = {
     App.username = window.location.search.substr(10);
 
     FormView.initialize();
-    RoomsView.initialize();
     MessagesView.initialize();
+    RoomsView.initialize();
 
     // Fetch initial batch of messages
     App.startSpinner();
     App.fetch(App.stopSpinner);
 
 
+
     // TODO: Make sure the app loads data from the API
     // continually, instead of just once at the start.
+
+    // EVENT HANDLERS
+    $('#chats').on('click', '.username', function(event) {
+      let selectedFriend = $(event.currentTarget).text();
+      Friends.toggleStatus(selectedFriend);
+    });
   },
 
   fetch: function(callback = ()=>{}) {
@@ -30,13 +37,15 @@ var App = {
       // reassign the _data variable in the Messages object to data return from readAll
       Messages.set(data);
     });
+    Rooms.set(Messages.get());
+    $('select').val(RoomsView.currentRoom);
     // TODO: Use the data to update Messages and Rooms
     // and re-render the corresponding views.
     //call the callback function
     callback();
     //call setTimeout(fetch)
-    MessagesView.render();
-    setTimeout(App.fetch.bind(this), 10000);
+    MessagesView.render(RoomsView.currentRoom);
+    setTimeout(App.fetch.bind(this), 1000);
   },
 
   startSpinner: function() {
